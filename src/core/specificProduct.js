@@ -9,10 +9,10 @@ const options = {
 
 }
 
-function getAllProducts( cb ) {
+function getSpecificProducts( cb ) {
     const client = new Client(options)
     client.connect()
-    client.query("SELECT * from radioshack", (err, res) => {
+    client.query("SELECT * FROM radioshack where brand_name = 'Apple'", (err, res) => {
         if (err) throw err;
         console.log(res)
         cb(res.rows)
@@ -20,6 +20,6 @@ function getAllProducts( cb ) {
 }
 
 module.exports = {
-    getAllProducts,
+    getSpecificProducts,
     
 }
