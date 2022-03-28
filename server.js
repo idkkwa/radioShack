@@ -11,7 +11,7 @@ const app = express();
 // HTML JS AND CSS are files that are static so each of them have to be on the server in order for them to be read
 
 app.use(express.static('public'));
-app.use(bodyParser.json());
+app.use(bodyParser());
 
 app.get('/api/v1/products/', getAllProducts)
 app.get('/api/v1/apple/', getSpecificProducts)
@@ -22,18 +22,17 @@ app.post('/user', (request, response) => {
     // Req is used to recieve stuff from the client
     console.log("Request: ", request.body);
     const username = request.body.username
-    const address = request.body.address
+    const password = request.body.address
 
     const user = {
         username:username,
-        address:address
+        password:password
     };
 
     response.json({msg: "Here is your information:", data: user})
 })
 
 app.post('/testProduct', (request, response) => {
-    var pro = request.body
     // Res is used to the send stuff to the browser
     // Req is used to recieve stuff from the client
     console.log("Request: ", request.body);
@@ -43,7 +42,12 @@ app.post('/testProduct', (request, response) => {
         products:products
     };
 
-    response.json({msg: "Here is your information:", data: testProduct})
+    if(products == 'Apple'){
+        
+        response.json({getAllProducts})
+    }
+    else
+        response.json({msg: "No data here", data: testProduct})
 })
 // Used as a last resort if the user enters an invalid address
 app.get('*', (request, response) => {

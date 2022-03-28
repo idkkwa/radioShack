@@ -15,20 +15,57 @@
     </head>
     <body>
 
+        <h1>I am trying to create an express app</h1>
+
+        <p>This is for testing purposes only</p>
+
+        
+
+        <div class="row">
+            <div class="column">
+                <div class="card">
+                    <img src="./images/box.png" alt="Apple">
+                    <div class="container">
+                    <h4><strong>Apple</b></h4> 
+                    </div>
+                </div>
+            </div>
+
+            <div class="column">
+                <a href="/api/v1/apple/">
+                <div class="card">
+                   
+                    <img src="./images/box.png" alt="Dell">
+                    <div class="container">
+                    <h4><strong>Dell</b></h4> 
+                    </div>
+                </div>
+            </a>
+
+            </div>
+
+            <div class="column">
+                <div class="card">
+                    <img src="./images/box.png" alt="RadioShack">
+                    <div class="container">
+                    <h4><strong>RadioShack</b></h4> 
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <form action="/user" method = "POST">
             <input type="text" name = "username">
-            <input type="text" name = "address">
+            <input type="text" name = "password">
             <button>Send Data</button>
         </form>
 
         <form action="/testProduct" method = "POST">
             <input type="text" name = "products">
-            <button>Send Data</button>
+            <button>Search Product</button>
         </form>
 
-        <h1>I am trying to create an express app</h1>
 
-        <p>This is for testing purposes only</p>
         
         <!--The href is referencing the style.css file. Doing this let's you use css on your homepage-->
         <script src="./app.js"></script>
