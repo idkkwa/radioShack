@@ -4,6 +4,8 @@ require('dotenv').config()
 const getAllProducts = require('./src/routes/getAllProducts')
 const getSpecificProducts = require('./src/routes/getSpecificProducts')
 const getMintoMax = require('./src/routes/getMintoMax');
+const getDellProduct = require('./src/routes/getDellProduct')
+const getRSProducts = require('./src/routes/getRSProduct')
 const path = require("path");
 const bodyParser = require("body-parser");
 
@@ -15,6 +17,8 @@ app.use(bodyParser());
 
 app.get('/api/v1/products/', getAllProducts)
 app.get('/api/v1/apple/', getSpecificProducts)
+app.get('/api/v1/dell/', getDellProduct)
+app.get('/api/v1/rs/', getRSProducts)
 app.get('/api/v1/price/', getMintoMax)
 
 app.post('/user', (request, response) => {
@@ -44,10 +48,10 @@ app.post('/testProduct', (request, response) => {
 
     if(products == 'Apple'){
         
-        response.json({getAllProducts})
+        response.json({msg: "You were looking for ", testProduct})
     }
     else
-        response.json({msg: "No data here", data: testProduct})
+        response.json({msg: "No data here"})
 })
 // Used as a last resort if the user enters an invalid address
 app.get('*', (request, response) => {
