@@ -8,6 +8,7 @@ const getDellProduct = require('./src/routes/getDellProduct')
 const getRSProducts = require('./src/routes/getRSProduct')
 const path = require("path");
 const bodyParser = require("body-parser");
+const { pool } = require('./db');
 
 const app = express();
 // HTML JS AND CSS are files that are static so each of them have to be on the server in order for them to be read
@@ -53,6 +54,26 @@ app.post('/testProduct', (request, response) => {
     else
         response.json({msg: "No data here"})
 })
+
+
+app.get("/search", async (request, response) => {
+
+    try{
+
+    const search = await pool.query(
+        "SELECT * FROM radioshack WHERE brand_name || ' ' || product_name LIKE $1", [`%${brand_name}%`]
+        )
+    response.json(search.rows);
+
+    }
+    catch(err){
+        console.error(err.msg)
+    }
+
+})
+
+
+
 // Used as a last resort if the user enters an invalid address
 app.get('*', (request, response) => {
     response.json('The page has not been found')
