@@ -1,4 +1,4 @@
-const { database } = require("pg/lib/defaults");
+require('dotenv').config()
 const { Client } = require('pg')
 
 const options = {
@@ -8,9 +8,17 @@ const options = {
     database: 'encode',
 }
 
-function getUsers( cb ) {
+function getAllUsers( cb ) {
     const client = new Client(options)
     client.connect()
-
+    client.query("SELECT * FROM login", (err, res) => {
+        if (err) throw err;
+        console.log(res)
+        cb(res.rows)
+    })
 }
-module.exports = getUsers;
+
+module.exports = {
+    getAllUsers,
+    
+}

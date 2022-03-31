@@ -1,4 +1,5 @@
 const express = require('express');
+const bcrypt = require("bcrypt");
 require('dotenv').config()
 
 const getAllProducts = require('./src/routes/getAllProducts')
@@ -9,7 +10,11 @@ const getRSProducts = require('./src/routes/getRSProduct')
 const path = require("path");
 const bodyParser = require("body-parser");
 const { pool } = require('./db');
+const { Client } = require('pg');
+const getAllUsers = require('./src/routes/getAllUsers');
+const { response } = require('express');
 
+const db = require('./db')
 const app = express();
 // HTML JS AND CSS are files that are static so each of them have to be on the server in order for them to be read
 
@@ -21,58 +26,50 @@ app.get('/api/v1/apple/', getSpecificProducts)
 app.get('/api/v1/dell/', getDellProduct)
 app.get('/api/v1/rs/', getRSProducts)
 app.get('/api/v1/price/', getMintoMax)
+app.get('/api/v1/users', getAllUsers)
 
-app.post('/user', (request, response) => {
-    // Res is used to the send stuff to the browser
-    // Req is used to recieve stuff from the client
-    console.log("Request: ", request.body);
-    const username = request.body.username
-    const password = request.body.address
-
-    const user = {
-        username:username,
-        password:password
-    };
-
-    response.json({msg: "Here is your information:", data: user})
-})
-
-app.post('/testProduct', (request, response) => {
-    // Res is used to the send stuff to the browser
-    // Req is used to recieve stuff from the client
-    console.log("Request: ", request.body);
-    const products = request.body.products
-
-    const testProduct = {
-        products:products
-    };
-
-    if(products == 'Apple'){
-        
-        response.json({msg: "You were looking for ", testProduct})
+app.post('/register', async (request, response) => {
+    try {
+        // Res is used to the send stuff to the browser
+        // Req is used to recieve stuff from the client
+        //const {username, password} = request.body;
+        const hash = await bcrypt.hash(request.body.password, 10);
+        const result = await db.query("INSERT INTO login (user_name, pass_word) VALUES ($1,$2) RETURNING *",
+        [request.body.username, hash]);
+        //('login').insert({username:username, hash:hash});
+        return res.json(result.rows[0]);
+        //response.status(200).send('It works!');
+    } 
+    
+    catch(e) {
+        console.log(e);
+        response.status(500).send('Something happened!')
     }
-    else
-        response.json({msg: "No data here"})
-})
+});
 
-
-app.get("/search", async (request, response) => {
-
-    try{
-
-    const search = await pool.query(
-        "SELECT * FROM radioshack WHERE brand_name || ' ' || product_name LIKE $1", [`%${brand_name}%`]
-        )
-    response.json(search.rows);
-
+app.post('/login', async (request, response) => {
+    try {
+        const {username, password} = request.body;
+        const user = await db('login').where({username: username});
+        if(user){
+            const validPass = await bcrypt.compare(password, user.hash);
+            if(validPass){
+                response.status(200).json('Valid!');
+            }
+            else{
+                response.json("Wrong");
+            }
+        }
+        else{
+            response.status(404).json("User not found");
+        }
+    } 
+    
+    catch(e) {
+        console.log(e);
+        response.status(500).send('Something happened!')
     }
-    catch(err){
-        console.error(err.msg)
-    }
-
 })
-
-
 
 // Used as a last resort if the user enters an invalid address
 app.get('*', (request, response) => {
