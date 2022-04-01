@@ -1,4 +1,4 @@
-const { getDellProduct } = require('../core/dellProduct')
+const { getDellProduct } = require('../core/products')
 
 module.exports = async (req , res) => {
 

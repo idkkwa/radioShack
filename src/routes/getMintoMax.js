@@ -1,4 +1,4 @@
-const { getMintoMax } = require('../core/priceMintoMax')
+const { getMintoMax } = require('../core/products')
 
 module.exports = async (req , res) => {
 

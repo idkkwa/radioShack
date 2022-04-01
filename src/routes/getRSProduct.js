@@ -1,4 +1,4 @@
-const { getRSProducts } = require('../core/rsProduct')
+const { getRSProducts } = require('../core/products')
 
 module.exports = async (req , res) => {
 

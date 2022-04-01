@@ -1,8 +1,8 @@
-const { getSpecificProducts } = require("../core/specificProduct")
+const { getAppleProducts } = require("../core/products")
 
 
 module.exports = async (req, res) => {
-    getSpecificProducts( data => {
+    getAppleProducts( data => {
         res.status(200).send({message: data})
     })
 }
