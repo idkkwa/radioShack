@@ -76,8 +76,8 @@ const updateUser = (request, response) => {
     client.connect()
     client.query('UPDATE login SET user_name = $1, pass_word = $2 WHERE id = $3', [user_name, pass_word, id], (error, results) => {
         response.status(200).send(`The User with id ${id} has been modified.`);
+        if(error) throw error;
     });
-    if(error) throw error;
   };
   
 const deleteUser = (request, response) => {
