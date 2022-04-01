@@ -9,6 +9,7 @@ const options = {
 
 }
 
+
 function getAllProducts( cb ) {
     const client = new Client(options)
     client.connect()
@@ -62,5 +63,5 @@ module.exports = {
     getAppleProducts,
     getDellProduct,
     getRSProducts,
-    getMintoMax
+    getMintoMax,
 }
