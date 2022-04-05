@@ -1,6 +1,7 @@
 require('dotenv').config()
 const cli = require('nodemon/lib/cli')
-const { Client } = require('pg')
+const { Client } = require('pg');
+const { rows } = require('pg/lib/defaults');
 
 
 
@@ -50,7 +51,7 @@ const getUserById = (request, response) => {
     const client = new Client(options)
     client.connect()
     const id = parseInt(request.params.id);
-        client.query('SELECT * FROM login WHERE id = $1', [id], (error, results) => {
+        client.query('SELECT * FROM login WHERE id = $1', [id], (err, results) => {
             response.status(200).json(results.rows);
             if(err) throw err;
         });
@@ -85,7 +86,35 @@ const deleteUser = (request, response) => {
     const client = new Client(options)
     client.connect()
     client.query('DELETE FROM login WHERE id = $1', [id], (error, results) => {
-        response.status(200).send(`The User with id ${id} hs been deleted.`);
+        response.status(200).send(`The User with id ${id} has been deleted.`);
+        if(error) throw error;
+    });
+  };
+
+  const getCount = (request, response) => {
+    const client = new Client(options)
+    client.connect()
+        client.query("SELECT COUNT(id) FROM login WHERE user_name = 'user1'", (err, results) => {
+          response.status(200).json(results.rows);
+        });
+  };
+
+  const loginUser = (request, response) => {
+    const username = request.body.user_name;
+    const client = new Client(options)
+    client.connect()
+    client.query('SELECT * FROM login WHERE user_name = $1', [username], (error, result) => {
+    console.log("User Typed:", username);
+    console.log(result);
+      if(result.rowCount == 0){
+        response.status(403);
+      }
+      if(result.rowCount > 1){
+        response.status(500);
+      }
+      if(result.rowCount == 1){
+        response.status(200).send(`The User is logged in!`);
+      }
     });
   };
 
@@ -95,5 +124,7 @@ module.exports = {
     getUserById,
     addUser,
     deleteUser,
-    updateUser
+    updateUser,
+    loginUser,
+    getCount
 }

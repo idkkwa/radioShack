@@ -1,6 +1,7 @@
 const express = require('express');
 const bcrypt = require("bcrypt");
 require('dotenv').config()
+const cors = require('cors');
 
 const getAllProducts = require('./src/routes/getAllProducts')
 const getSpecificProducts = require('./src/routes/getSpecificProducts')
@@ -19,66 +20,57 @@ const app = express();
 
 app.use(express.static('public'));
 app.use(bodyParser());
+app.use(cors());
 
 const api = require('./src/core/users');
 
-app.get('/user/', api.getUsers);
-app.get('/user/:id', api.getUserById);
-app.post('/user/', api.addUser);
-app.put('/user/:id', api.updateUser);
-app.delete('/user/:id', api.deleteUser);
+app.get('/api/v1/user/', api.getUsers);
+app.get('/api/v1/user/:id', api.getUserById);
+app.post('/api/v1/user/', api.addUser);
+app.put('/api/v1/user/:id', api.updateUser);
+app.delete('/api/v1/user/:id', api.deleteUser);
+app.post('/api/v1/login', api.loginUser);
+app.get('/api/v1/getlogin', api.getCount);
+
 
 app.get('/api/v1/products/', getAllProducts)
 app.get('/api/v1/apple/', getSpecificProducts)
 app.get('/api/v1/dell/', getDellProduct)
 app.get('/api/v1/rs/', getRSProducts)
 app.get('/api/v1/price/', getMintoMax)
-app.get('/api/v1/users', getAllUsers)
 
-app.get('/api/v1/user/:id', getOneUser);
 
-app.post('/register', async (request, response) => {
-    try {
-        // Res is used to the send stuff to the browser
-        // Req is used to recieve stuff from the client
-        //const {username, password} = request.body;
-        const hash = await bcrypt.hash(request.body.password, 10);
-        const result = await db.query("INSERT INTO login (user_name, pass_word) VALUES ($1,$2) RETURNING *",
-        [request.body.username, hash]);
-        //('login').insert({username:username, hash:hash});
-        return res.json(result.rows[0]);
-        //response.status(200).send('It works!');
-    } 
-    
-    catch(e) {
-        console.log(e);
-        response.status(500).send('Something happened!')
-    }
-});
+// app.get('/login', (req, res) => {
+//     res.sendFile(__dirname + '/static/login.html');
+//   });
+// app.post('/login', async (request, response) => {
+//     try {
+//         const {username, password} = request.body;
+//         client.query('SELECT * FROM login WHERE id = $1', [id], (err, results) => {
+//         response.status(200).json(results.rows);
+//         res.send(`Username: ${username} Password: ${password}`);
+//         //     const user = await db('login').where({user_name: username});
+//         //     if(user){
+//         //         const validPass = await bcrypt.compare(password, user.hash);
+//         //         if(validPass){
+//         //             response.status(200).json('Valid!');
+//         //         }
+//         //         else{
+//         //             response.json("Wrong");
+//         //         }
+//         //     }
+//         //     else{
+//         //         response.status(404).json("User not found");
+//         //     }
 
-app.post('/login', async (request, response) => {
-    try {
-        const {username, password} = request.body;
-        const user = await db('login').where({username: username});
-        if(user){
-            const validPass = await bcrypt.compare(password, user.hash);
-            if(validPass){
-                response.status(200).json('Valid!');
-            }
-            else{
-                response.json("Wrong");
-            }
-        }
-        else{
-            response.status(404).json("User not found");
-        }
-    } 
-    
-    catch(e) {
-        console.log(e);
-        response.status(500).send('Something happened!')
-    }
-})
+//         //     console.log(username);
+//         } 
+        
+//     catch(e) {
+//         console.log(e);
+//         response.status(500).send('Something happened!')
+//     }
+// })
 
 // Used as a last resort if the user enters an invalid address
 app.get('*', (request, response) => {
