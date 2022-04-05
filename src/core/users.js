@@ -30,7 +30,7 @@ const allTheUsers = [
 function getAllUsers( cb ) {
     const client = new Client(options)
     client.connect()
-    client.query("SELECT * FROM login", (err, res) => {
+    client.query("SELECT * FROM users", (err, res) => {
         if (err) throw err;
         console.log(res)
         cb(res.rows)
@@ -40,7 +40,7 @@ function getAllUsers( cb ) {
 const getUsers = (request, response) => {
     const client = new Client(options)
     client.connect()
-    client.query('SELECT * FROM login', (err, res) => {
+    client.query('SELECT * FROM users', (err, res) => {
           response.status(200).json(res.rows);
           if(err) throw err;
         });
@@ -51,7 +51,7 @@ const getUserById = (request, response) => {
     const client = new Client(options)
     client.connect()
     const id = parseInt(request.params.id);
-        client.query('SELECT * FROM login WHERE id = $1', [id], (err, results) => {
+        client.query('SELECT * FROM users WHERE id = $1', [id], (err, results) => {
             response.status(200).json(results.rows);
             if(err) throw err;
         });
@@ -59,10 +59,10 @@ const getUserById = (request, response) => {
 };
 
 const addUser = async (request, response) => {
-        const { user_name, pass_word } = request.body;
+        const {username, password} = request.body;
         const client = new Client(options)
         client.connect()
-            client.query('INSERT INTO login (user_name, pass_word) VALUES ($1, $2)', [user_name, pass_word], (error, results) => {
+            client.query('INSERT INTO users (username, password) VALUES ($1, $2)', [username, password], (error, results) => {
                 response.status(201).send(`The User has been added successfully.`);
                 if(error) throw error;
 
@@ -72,10 +72,10 @@ const addUser = async (request, response) => {
   
 const updateUser = (request, response) => {
     const id = parseInt(request.params.id);
-    const { user_name, pass_word } = request.body;
+    const { username, password } = request.body;
     const client = new Client(options)
     client.connect()
-    client.query('UPDATE login SET user_name = $1, pass_word = $2 WHERE id = $3', [user_name, pass_word, id], (error, results) => {
+    client.query('UPDATE users SET username = $1, password = $2 WHERE id = $3', [username, password, id], (error, results) => {
         response.status(200).send(`The User with id ${id} has been modified.`);
         if(error) throw error;
     });
@@ -85,7 +85,7 @@ const deleteUser = (request, response) => {
     const id = parseInt(request.params.id);
     const client = new Client(options)
     client.connect()
-    client.query('DELETE FROM login WHERE id = $1', [id], (error, results) => {
+    client.query('DELETE FROM users WHERE id = $1', [id], (error, results) => {
         response.status(200).send(`The User with id ${id} has been deleted.`);
         if(error) throw error;
     });
@@ -94,19 +94,19 @@ const deleteUser = (request, response) => {
   const getCount = (request, response) => {
     const client = new Client(options)
     client.connect()
-        client.query("SELECT COUNT(id) FROM login WHERE user_name = 'user1'", (err, results) => {
+        client.query("SELECT COUNT(id) FROM users WHERE username = 'user1'", (err, results) => {
           response.status(200).json(results.rows);
         });
   };
 
   const loginUser = (request, response) => {
-    const username = request.body.user_name;
+    const username = request.body.username;
     const client = new Client(options)
     client.connect()
-    client.query('SELECT * FROM login WHERE user_name = $1', [username], (error, result) => {
+    client.query('SELECT * FROM users WHERE username = $1', [username], (error, result) => {
     console.log("User Typed:", username);
     console.log(result);
-      if(result.rowCount == 0){
+      if(result.rowCount === 0){
         response.status(403);
       }
       if(result.rowCount > 1){
