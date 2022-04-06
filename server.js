@@ -32,13 +32,14 @@ app.delete('/api/v1/user/:id', api.deleteUser);
 app.post('/api/v1/login', api.loginUser);
 app.get('/api/v1/getlogin', api.getCount);
 
+const api2 = require('./src/core/products');
 
-app.get('/api/v1/products/', getAllProducts)
-app.get('/api/v1/apple/', getSpecificProducts)
-app.get('/api/v1/dell/', getDellProduct)
-app.get('/api/v1/rs/', getRSProducts)
-app.get('/api/v1/price/', getMintoMax)
-
+app.get('/api/v1/products/', api2.getAllProducts);
+app.get('/api/v1/products/:id', api2.getProductById);
+app.get('/api/v1/products/:brand_name', api2.getProductByName);
+app.post('/api/v1/products/', api2.addProduct);
+app.put('/api/v1/product/:id', api2.updateProduct);
+app.delete('/api/v1/product/:id', api2.deleteProduct);
 
 // Used as a last resort if the user enters an invalid address
 app.get('*', (request, response) => {

@@ -29,7 +29,6 @@ const getUsers = (request, response) => {
         });
 };
 
-
 const getUserById = (request, response) => {
     const client = new Client(options)
     client.connect()
