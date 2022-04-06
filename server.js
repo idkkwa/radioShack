@@ -40,38 +40,6 @@ app.get('/api/v1/rs/', getRSProducts)
 app.get('/api/v1/price/', getMintoMax)
 
 
-// app.get('/login', (req, res) => {
-//     res.sendFile(__dirname + '/static/login.html');
-//   });
-// app.post('/login', async (request, response) => {
-//     try {
-//         const {username, password} = request.body;
-//         client.query('SELECT * FROM login WHERE id = $1', [id], (err, results) => {
-//         response.status(200).json(results.rows);
-//         res.send(`Username: ${username} Password: ${password}`);
-//         //     const user = await db('login').where({user_name: username});
-//         //     if(user){
-//         //         const validPass = await bcrypt.compare(password, user.hash);
-//         //         if(validPass){
-//         //             response.status(200).json('Valid!');
-//         //         }
-//         //         else{
-//         //             response.json("Wrong");
-//         //         }
-//         //     }
-//         //     else{
-//         //         response.status(404).json("User not found");
-//         //     }
-
-//         //     console.log(username);
-//         } 
-        
-//     catch(e) {
-//         console.log(e);
-//         response.status(500).send('Something happened!')
-//     }
-// })
-
 // Used as a last resort if the user enters an invalid address
 app.get('*', (request, response) => {
     response.json('The page has not been found')

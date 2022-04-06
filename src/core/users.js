@@ -3,29 +3,12 @@ const cli = require('nodemon/lib/cli')
 const { Client } = require('pg');
 const { rows } = require('pg/lib/defaults');
 
-
-
 const options = {
     port: process.env.DB_PORT,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: 'encode',
 }
-
-const allTheUsers = [
-    {
-      username: 'Mary1',
-      password: "test"
-    },
-    {
-      username: 'Joseph2',
-      password: "test"
-    },
-    {
-      username: 'Kyle3',
-      password: "test"
-    }
-  ];
 
 function getAllUsers( cb ) {
     const client = new Client(options)
