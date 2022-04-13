@@ -1,5 +1,4 @@
 require('dotenv').config()
-const { request } = require('express');
 const { Client } = require('pg')
 
 const options = {
@@ -32,10 +31,10 @@ const getProductById = (request, response) => {
 };
 
 const getProductByName = ( request, response ) => {
-    const brandName = request.params.brand_name;
     const client = new Client(options)
     client.connect()
-    client.query('SELECT * FROM radioshack WHERE brand_name = $1', [brandName], (err, results) => {
+    const brand_name = request.params.brand_name;
+    client.query('SELECT * FROM radioshack WHERE brand_name = $1', [brand_name], (err, results) => {
         response.status(200).json(results.rows);
         if(err) throw err;
     });
