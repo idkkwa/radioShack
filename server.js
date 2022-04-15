@@ -36,7 +36,6 @@ const api2 = require('./src/core/products');
 
 app.get('/api/v1/products/', api2.getAllProducts);
 app.get('/api/v1/products/:id', api2.getProductById);
-app.get('/api/v1/products/?brand_name', api2.getProductByName);
 app.post('/api/v1/products/', api2.addProduct);
 app.put('/api/v1/products/:id', api2.updateProduct);
 app.delete('/api/v1/products/:id', api2.deleteProduct);

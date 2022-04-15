@@ -30,15 +30,15 @@ const getProductById = (request, response) => {
 
 };
 
-const getProductByName = ( request, response ) => {
-    const client = new Client(options)
-    client.connect()
-    const brand_name = request.params.brand_name;
-    client.query('SELECT * FROM radioshack WHERE brand_name = $1', [brand_name], (err, results) => {
-        response.status(200).json(results.rows);
-        if(err) throw err;
-    });
-};
+// const getProductByName = ( request, response ) => {
+//     const client = new Client(options)
+//     client.connect()
+//     const brand_name = request.params.brand_name;
+//     client.query('SELECT * FROM radioshack WHERE brand_name = $1', [brand_name], (err, results) => {
+//         response.status(200).json(results.rows);
+//         if(err) throw err;
+//     });
+// };
 
 const addProduct = async (request, response) => {
         const {product_name, brand_name, price, product_color, storage, product_description} = request.body;
@@ -78,7 +78,6 @@ const deleteProduct = (request, response) => {
 module.exports = {
     getAllProducts,
     getProductById,
-    getProductByName,
     addProduct,
     updateProduct,
     deleteProduct
